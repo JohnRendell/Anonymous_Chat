@@ -25,8 +25,9 @@ function div_popUp(text){
     }
 }
 
-function submitNickname(){
+async function submitNickname(){
     var input = document.getElementById("nicknameInputID");
+    var loadingValidate = document.getElementById("loadingValidate");
 
     if(!input.value){
         div_popUp("Nickname should not be empty.");
@@ -37,7 +38,31 @@ function submitNickname(){
         divPopUpCount++;
     }
     else{
-        window.location.href = "/Welcome/Home/" + input.value;
-        socket.emit("registerNickname", input.value);
+        if(loadingValidate){
+            loadingValidate.style.display = "flex";
+        }
+        try{
+            const setCookie = await fetch("/cookieStatus/setCookie", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ nickname: input.value })
+            });
+
+            const setCookie_data = await setCookie.json();
+
+            if(setCookie_data.message === "success"){
+                if(loadingValidate){
+                    loadingValidate.style.display = "none";
+                }
+                window.location.href = "/Welcome/Home/" + input.value;
+                socket.emit("registerNickname", input.value);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 }

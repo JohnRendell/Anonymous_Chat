@@ -9,8 +9,7 @@ module.exports = (server)=>{
         socket.on("registerNickname", (nickname)=>{
             const data = { user: nickname, socketID: socket.id }
             users.push(data);
-
-            console.table(users)
+            console.table(users);
         });
     });
 }

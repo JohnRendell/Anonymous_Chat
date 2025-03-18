@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 //for env file
 require("dotenv").config({ path: path.resolve(__dirname, "../keys.env")});
 
+app.use(bodyParser.json());
+
 //serve folders
 app.use(express.static(path.join(__dirname, "../Public")));
 app.use(express.static(path.join(__dirname, "../View")));
@@ -16,7 +18,10 @@ app.use(express.static(path.join(__dirname, "../Style")));
 app.use(express.static(path.join(__dirname, "../Script")));
 
 //for routes
-app.use("/Welcome", require("./routePage.js"))
+app.use("/Welcome", require("./routePage.js"));
+
+//cookies
+app.use("/cookieStatus", require("./cookieStatus.js"));
 
 //for root page
 app.get("/", (req, res)=>{
@@ -27,8 +32,6 @@ app.get("/", (req, res)=>{
 app.get("*", (req, res)=>{
     res.status(404).sendFile(path.join(__dirname, "../Public/404page.html"));
 });;
-
-app.use(bodyParser.json());
 
 //for socket servers
 require("./socketServer")(socketServer);
