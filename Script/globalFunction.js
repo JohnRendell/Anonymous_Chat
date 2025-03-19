@@ -68,11 +68,11 @@ async function hasCookie(){
     try{
         let text = await getCookie();
 
-        if(text !== "No Cookie"){
-            window.location.href = "/Welcome/Home/" + text;
+        if(text === "No Cookie"){
+            socket.emit("user_logout", socket.id, "index_page");
         }
         else{
-            socket.emit("user_logout", socket.id);
+            window.location.href = "/Welcome/Home/" + text;
         }
     }
     catch(err){

@@ -22,7 +22,7 @@ module.exports = (server)=>{
         });
 
         //for user logout
-        socket.on("user_logout", (id, type = "index_page")=>{
+        socket.on("user_logout", (id, type)=>{
             const findID = users.findIndex(user => user.socketID == id);
 
             if(findID > -1){
@@ -38,6 +38,7 @@ module.exports = (server)=>{
             if(type === "welcomePage"){
                 socket.emit("user_logout");
             }
+            console.log("Logged Out")
         });
 
         //validate nickname

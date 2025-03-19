@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="/animation.css">
 </head>
 <body class="bg-[#C7D9DD] w-screen h-screen flex flex-col justify-center gap-2 items-center overflow-hidden">
-    <h1 class="text-center font-IrishGrover text-bold text-[20px]">Your Nickname?</h1>
+    <h1 class="text-center font-IrishGrover text-bold text-2xl xs:text-md">Welcome to Anonymous Chat</h1>
+    <h1 class="text-center font-IrishGrover text-bold text-lg">Type your Nickname to start</h1>
     
     <div class="w-fit h-auto flex flex-row items-center gap-2">
         <input id="nicknameInputID" type="text" maxlength="10" placeholder="Type here..."
@@ -19,6 +20,8 @@
         <p id="nicknameCounterID" class="font-roboto text-sm text-black text-center">0/10</p>
     </div>
     <button class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer active:bg-[#8f98db]" onclick="submitNickname()">Proceed</button>
+
+    <a href="https://github.com/JohnRendell/Anonymous_Chat" target="_blank" class="absolute bottom-2 left-2 font-roboto text-left text-sm underline">Developed by John Rendell Catuiza</a>
 
     <!--Validation loading-->
     <div class="absolute w-screen h-screen bg-black/25 justify-center items-center hidden" id="loadingValidate">
