@@ -1,9 +1,12 @@
+let sender;
+
 async function readCookie() {
     let text = await getCookie();
     var welcomeHeader = document.getElementById("welcomeHeader");
 
     if(text && welcomeHeader){
         welcomeHeader.innerText = "Welcome " + text;
+        sender = text;
     }
 }
 
@@ -32,6 +35,53 @@ async function logout() {
     }
     socket.emit("user_logout", socket.id, "welcomePage");
     deleteCookie();
+}
+
+function toggleRoom(id){
+    let stuffPanel = document.getElementById("stuffPanel");
+    let messagePanel = document.getElementById("messagePanel");
+    let roomPanel = document.getElementById("roomPanel");
+
+    stuffPanel.style.display = id === stuffPanel.id ? "block" : "none";
+    messagePanel.style.display = id === messagePanel.id ? "block" : "none";
+    roomPanel.style.display = id === roomPanel.id ? "block" : "none";
+}
+
+function sendMessage(){
+    var container = document.getElementById("globalMessageContainer");
+    var messageInput = document.getElementById("messageInput");
+    var messageCounter = document.getElementById("messageCounter");
+
+    if(container && messageInput && messageCounter){
+        var wrapper = document.createElement("div");
+        wrapper.setAttribute("class", "w-full h-auto flex justify-end");
+        container.appendChild(wrapper);
+
+        var contentWrapper = document.createElement("div");
+        contentWrapper.setAttribute("class", "flex flex-col");
+        wrapper.appendChild(contentWrapper);
+
+        var senderP = document.createElement("h1");
+        senderP.setAttribute("class", "font-roboto text-left text-black text-sm");
+        senderP.append(document.createTextNode(sender + " (You)"));
+        contentWrapper.appendChild(senderP);
+
+        var messageWrapper = document.createElement("div");
+        messageWrapper.setAttribute("class", "w-[10rem] h-auto bg-[#ffd76b] p-2 rounded-md");
+        contentWrapper.appendChild(messageWrapper);
+
+        var messageContent = document.createElement("div");
+        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap");
+        messageContent.append(document.createTextNode(messageInput.value));
+        messageWrapper.appendChild(messageContent);
+
+        socket.emit("globalMessages", sender, messageInput.value);
+
+        messageInput.value = "";
+        messageCounter.innerText = 0 + "/300";
+
+        container.scrollTo(0, container.scrollHeight);
+    }
 }
 
 readCookie();

@@ -57,5 +57,10 @@ module.exports = (server)=>{
             socket.emit("registerNickname", nickname, status);
             console.table(users);
         });
+
+        //sending global messages
+        socket.on("globalMessages", (user, msg)=>{
+            socket.broadcast.emit("globalMessages", user, msg);
+        })
     });
 }

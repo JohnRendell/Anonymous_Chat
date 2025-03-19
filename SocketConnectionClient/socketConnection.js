@@ -41,6 +41,36 @@ socket.on("registerNickname", async (nickname, status)=>{
     }
 });
 
+socket.on("globalMessages", (receiver, msg)=>{
+    var container = document.getElementById("globalMessageContainer");
+
+    if(container){
+        var wrapper = document.createElement("div");
+        wrapper.setAttribute("class", "w-full h-auto flex justify-start");
+        container.appendChild(wrapper);
+
+        var contentWrapper = document.createElement("div");
+        contentWrapper.setAttribute("class", "flex flex-col");
+        wrapper.appendChild(contentWrapper);
+
+        var senderP = document.createElement("h1");
+        senderP.setAttribute("class", "font-roboto text-left text-black text-sm");
+        senderP.append(document.createTextNode(receiver));
+        contentWrapper.appendChild(senderP);
+
+        var messageWrapper = document.createElement("div");
+        messageWrapper.setAttribute("class", "w-[10rem] h-auto bg-[#ffc936] p-2 rounded-md");
+        contentWrapper.appendChild(messageWrapper);
+
+        var messageContent = document.createElement("div");
+        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap");
+        messageContent.append(document.createTextNode(msg));
+        messageWrapper.appendChild(messageContent);
+
+        container.scrollTo(0, container.scrollHeight);
+    }
+})
+
 socket.on("user_logout", ()=>{
     window.location.href = "/";
 });
