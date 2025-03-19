@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="/animation.css">
 </head>
 <body class="bg-[#C7D9DD] w-screen h-screen flex flex-col justify-center gap-2 items-center overflow-hidden">
-    <h1 class="text-center font-IrishGrover text-bold text-[20px]">Who are you?</h1>
+    <h1 class="text-center font-IrishGrover text-bold text-[20px]">Your Nickname?</h1>
     
     <div class="w-fit h-auto flex flex-row items-center gap-2">
-        <input id="nicknameInputID" type="text" maxlength="10" placeholder="Type your nickname"
+        <input id="nicknameInputID" type="text" maxlength="10" placeholder="Type here..."
             class="text-center text-sm font-roboto w-[10rem] h-[2rem] border-t-0 border-l-0 border-r-0 border-b-2 bg-transparent outline-none" oninput="textCounter('nicknameInputID', 'nicknameCounterID', 10)">
         <p id="nicknameCounterID" class="font-roboto text-sm text-black text-center">0/10</p>
     </div>
@@ -30,12 +30,10 @@
 </body>
 </html>
 
-<script src="./socketConnection.js"></script>
 <script src="./globalFunction.js"></script>
+<script src="./socketConnection.js"></script>
 <script src="./nicknameValidate.js"></script>
 
 <script>
-    window.onload = ()=>{
-        deleteCookie();
-    }
+    hasCookie();
 </script>

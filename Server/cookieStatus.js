@@ -17,6 +17,9 @@ route.get("/getCookie", (req, res)=>{
     if(nickname){
         res.status(200).send(nickname);
     }
+    else{
+        res.status(200).send("No Cookie");
+    }
 });
 
 route.get("/deleteCookie", (req, res)=>{
