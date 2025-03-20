@@ -1,4 +1,4 @@
-let sender;
+var global_sender;
 
 async function readCookie() {
     let text = await getCookie();
@@ -6,7 +6,7 @@ async function readCookie() {
 
     if(text && welcomeHeader){
         welcomeHeader.innerText = "Welcome " + text;
-        sender = text;
+        global_sender = text;
     }
 }
 
@@ -52,7 +52,7 @@ function sendMessage(){
     var messageInput = document.getElementById("messageInput");
     var messageCounter = document.getElementById("messageCounter");
 
-    if(container && messageInput && messageCounter){
+    if(container && messageInput && messageCounter && messageInput.value){
         var wrapper = document.createElement("div");
         wrapper.setAttribute("class", "w-full h-auto flex justify-end");
         container.appendChild(wrapper);
@@ -63,7 +63,7 @@ function sendMessage(){
 
         var senderP = document.createElement("h1");
         senderP.setAttribute("class", "font-roboto text-left text-black text-sm");
-        senderP.append(document.createTextNode(sender + " (You)"));
+        senderP.append(document.createTextNode(global_sender + " (You)"));
         contentWrapper.appendChild(senderP);
 
         var messageWrapper = document.createElement("div");
@@ -75,7 +75,7 @@ function sendMessage(){
         messageContent.append(document.createTextNode(messageInput.value));
         messageWrapper.appendChild(messageContent);
 
-        socket.emit("globalMessages", sender, messageInput.value);
+        socket.emit("globalMessages", global_sender, messageInput.value);
 
         messageInput.value = "";
         messageCounter.innerText = 0 + "/300";
@@ -84,5 +84,14 @@ function sendMessage(){
     }
 }
 
+function modal_type_func(type){
+    var modalHeader = document.getElementById("modalTitle");
+
+    if(modalHeader){
+        modalHeader.innerText = type;
+    }
+}
+
+modal_type_func('Global Message');
 readCookie();
 user_pageRefresh();

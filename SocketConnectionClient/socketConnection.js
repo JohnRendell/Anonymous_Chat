@@ -1,4 +1,5 @@
 const socket = io();
+let globalMessageCounter = 0;
 
 socket.on("connect", ()=>{
     var socketID = document.getElementById("socketID");
@@ -6,6 +7,7 @@ socket.on("connect", ()=>{
     if(socketID){
         socketID.innerText = "Socket ID: " + socket.id;
     }
+    socket.emit("list_users");
 });
 
 socket.on("registerNickname", async (nickname, status)=>{
@@ -42,9 +44,16 @@ socket.on("registerNickname", async (nickname, status)=>{
 });
 
 socket.on("globalMessages", (receiver, msg)=>{
+    globalMessageCounter++;
     var container = document.getElementById("globalMessageContainer");
 
     if(container){
+        var globalMessageCounterDiv = document.getElementById("globalMessageCounter");
+
+        if(globalMessageCounterDiv){
+            globalMessageCounterDiv.innerText = globalMessageCounter >= 0 ? (globalMessageCounter >= 10 ? "10+" : globalMessageCounter) : "";
+        }
+
         var wrapper = document.createElement("div");
         wrapper.setAttribute("class", "w-full h-auto flex justify-start");
         container.appendChild(wrapper);
@@ -69,7 +78,7 @@ socket.on("globalMessages", (receiver, msg)=>{
 
         container.scrollTo(0, container.scrollHeight);
     }
-})
+});
 
 socket.on("user_logout", ()=>{
     window.location.href = "/";

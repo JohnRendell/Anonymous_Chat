@@ -223,9 +223,6 @@
   .hidden {
     display: none;
   }
-  .table {
-    display: table;
-  }
   .h-\[2rem\] {
     height: 2rem;
   }
@@ -268,14 +265,8 @@
   .w-screen {
     width: 100vw;
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
   .cursor-pointer {
     cursor: pointer;
-  }
-  .resize {
-    resize: both;
   }
   .flex-col {
     flex-direction: column;
@@ -328,10 +319,6 @@
   .rounded-sm {
     border-radius: var(--radius-sm);
   }
-  .border {
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-  }
   .border-t-0 {
     border-top-style: var(--tw-border-style);
     border-top-width: 0px;
@@ -368,9 +355,6 @@
   }
   .bg-\[\#ffd76b\] {
     background-color: #ffd76b;
-  }
-  .bg-black {
-    background-color: var(--color-black);
   }
   .bg-black\/25 {
     background-color: color-mix(in oklab, var(--color-black) 25%, transparent);
@@ -439,10 +423,6 @@
   .opacity-0 {
     opacity: 0%;
   }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
-  }
   .outline-none {
     --tw-outline-style: none;
     outline-style: none;
@@ -471,38 +451,8 @@
       background-color: var(--color-green-700);
     }
   }
-  .max-\[360px\]\:h-\[10rem\] {
-    @media (width < 360px) {
-      height: 10rem;
-    }
-  }
   .max-xsm\:h-\[10rem\] {
     @media (width < 360px) {
-      height: 10rem;
-    }
-  }
-  .max-\[xsm\]\:h-\[10rem\] {
-    @media (width < xsm) {
-      height: 10rem;
-    }
-  }
-  .min-\[3\]\:h-\[10rem\] {
-    @media (width >= 3) {
-      height: 10rem;
-    }
-  }
-  .min-\[360px\]\:h-\[10rem\] {
-    @media (width >= 360px) {
-      height: 10rem;
-    }
-  }
-  .min-xsm\:h-\[10rem\] {
-    @media (width >= 360px) {
-      height: 10rem;
-    }
-  }
-  .xsm\:h-\[10rem\] {
-    @media (width >= 360px) {
       height: 10rem;
     }
   }
@@ -516,11 +466,6 @@
       display: none;
     }
   }
-  .min-\[xsm\]\:h-\[10rem\] {
-    @media (width >= xsm) {
-      height: 10rem;
-    }
-  }
 }
 @property --tw-border-style {
   syntax: "*";
@@ -530,9 +475,4 @@
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
-}
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
 }

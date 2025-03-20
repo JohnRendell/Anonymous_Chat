@@ -21,6 +21,16 @@ module.exports = (server)=>{
             console.log("Name list: " + nickname_list);
         });
 
+        //for listing active users
+        socket.on("list_users", ()=>{
+            let activeUsers = users.map(user=>({
+                username: user.user,
+                socketID: user.socketID
+            }));
+
+            server.emit("list_users", activeUsers);
+        });
+
         //for user logout
         socket.on("user_logout", (id, type)=>{
             const findID = users.findIndex(user => user.socketID == id);
