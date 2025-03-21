@@ -9,11 +9,18 @@ module.exports = (server)=>{
 
         //for reloading page
         socket.on("pageRefresh", (nickname)=>{
+            const data = { user: nickname, socketID: socket.id };
+
             users.forEach(user => {
                 if(nickname == user.user){
                     user.socketID = socket.id;
                 }
             });
+
+            if(!nickname_list.includes(nickname)){
+                nickname_list.push(nickname);
+                users.push(data);
+            }
         });
 
         //for listing active users
@@ -69,6 +76,17 @@ module.exports = (server)=>{
         //sending global messages
         socket.on("globalMessages", (user, msg)=>{
             socket.broadcast.emit("globalMessages", user, msg);
-        })
+        });
+
+        //sending private messages
+        socket.on("privateMessages", (sender, receiver, msg)=>{
+            const userIndex = users.findIndex(user => user.user == receiver);
+
+            if(userIndex > -1){
+                let socketID = users[userIndex].socketID;
+
+                socket.to(socketID).emit("privateMessages", sender, msg);
+            }
+        });
     });
 }

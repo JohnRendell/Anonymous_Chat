@@ -15,6 +15,7 @@ async function user_pageRefresh() {
         let text = await getCookie();
 
         if(text === "No Cookie"){
+            socket.emit("user_leave", global_sender);
             window.location.href = "/";
         }
         else{
