@@ -1,2 +1,2 @@
-# Anonymouse_Chat
- A chat web app using express, socket.io and tailwind css as frontend
+# Anonymous_Chat
+A chat web app using express and socket.io for backend and tailwind for frontend.
