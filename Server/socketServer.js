@@ -14,11 +14,6 @@ module.exports = (server)=>{
                     user.socketID = socket.id;
                 }
             });
-
-            console.log("Current list");
-            console.table(users)
-
-            console.log("Name list: " + nickname_list);
         });
 
         //for listing active users
@@ -48,8 +43,11 @@ module.exports = (server)=>{
             if(type === "welcomePage"){
                 socket.emit("user_logout");
             }
-            console.log("Logged Out")
         });
+
+        socket.on("user_leave", (user)=>{
+            socket.broadcast.emit("user_leave", user);
+        })
 
         //validate nickname
         socket.on("registerNickname", (nickname)=>{

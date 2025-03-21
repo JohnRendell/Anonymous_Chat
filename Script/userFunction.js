@@ -34,23 +34,14 @@ async function logout() {
         loadingValidate.style.display = "flex";
     }
     socket.emit("user_logout", socket.id, "welcomePage");
+    socket.emit("user_leave", global_sender);
     deleteCookie();
-}
-
-function toggleRoom(id){
-    let stuffPanel = document.getElementById("stuffPanel");
-    let messagePanel = document.getElementById("messagePanel");
-    let roomPanel = document.getElementById("roomPanel");
-
-    stuffPanel.style.display = id === stuffPanel.id ? "block" : "none";
-    messagePanel.style.display = id === messagePanel.id ? "block" : "none";
-    roomPanel.style.display = id === roomPanel.id ? "block" : "none";
 }
 
 function sendMessage(){
     var container = document.getElementById("globalMessageContainer");
-    var messageInput = document.getElementById("messageInput");
-    var messageCounter = document.getElementById("messageCounter");
+    var messageInput = document.getElementById("globalMessageInput");
+    var messageCounter = document.getElementById("globalInputMessageCounter");
 
     if(container && messageInput && messageCounter && messageInput.value){
         var wrapper = document.createElement("div");
@@ -70,8 +61,8 @@ function sendMessage(){
         messageWrapper.setAttribute("class", "w-[10rem] h-auto bg-[#ffd76b] p-2 rounded-md");
         contentWrapper.appendChild(messageWrapper);
 
-        var messageContent = document.createElement("div");
-        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap");
+        var messageContent = document.createElement("p");
+        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap break-words");
         messageContent.append(document.createTextNode(messageInput.value));
         messageWrapper.appendChild(messageContent);
 
@@ -84,14 +75,13 @@ function sendMessage(){
     }
 }
 
-function modal_type_func(type){
-    var modalHeader = document.getElementById("modalTitle");
+function globalMessageModalStatus(status){
+    var globalModal = document.getElementById("globalMessageModal");
 
-    if(modalHeader){
-        modalHeader.innerText = type;
+    if(globalModal){
+        globalModal.style.display = status;
     }
 }
 
-modal_type_func('Global Message');
 readCookie();
 user_pageRefresh();

@@ -11,7 +11,7 @@ socket.on("list_users", (activeUsers)=>{
                     var wrapper = document.createElement("div");
                     wrapper.setAttribute("class", "w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer hover:bg-[#ADB2D4] group");
                     wrapper.setAttribute("id", user.username + "_message");
-                    wrapper.setAttribute("onclick", "modal_type_func('" + user.username + " message'); toggleRoom('messagePanel')");
+                    wrapper.setAttribute("onclick", "");
                     container.appendChild(wrapper);
 
                     var title = document.createElement("p");
@@ -28,3 +28,12 @@ socket.on("list_users", (activeUsers)=>{
         });
     }
 });
+
+//when user leave
+socket.on("user_leave", (user)=>{
+    var messageUser = document.getElementById(user + "_message");
+
+    if(messageUser){
+        messageUser.remove();
+    }
+})

@@ -71,8 +71,8 @@ socket.on("globalMessages", (receiver, msg)=>{
         messageWrapper.setAttribute("class", "w-[10rem] h-auto bg-[#ffc936] p-2 rounded-md");
         contentWrapper.appendChild(messageWrapper);
 
-        var messageContent = document.createElement("div");
-        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap");
+        var messageContent = document.createElement("p");
+        messageContent.setAttribute("class", "font-roboto text-left text-sm text-black text-wrap break-words");
         messageContent.append(document.createTextNode(msg));
         messageWrapper.appendChild(messageContent);
 
