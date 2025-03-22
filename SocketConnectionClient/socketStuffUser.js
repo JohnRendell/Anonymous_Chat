@@ -208,4 +208,35 @@ socket.on("user_leave", (user)=>{
     if(messageUser){
         messageUser.remove();
     }
-})
+});
+
+//for searching user
+socket.on("findingUser", (query, status)=>{
+    var container = document.getElementById("stuffContainer");
+    var label = document.getElementById("notFoundLabel");
+
+    if(container && label){
+        var containerChild = Array.from(container.children);
+
+        for(let child of containerChild){
+            if(query){
+                child.style.display = "none";
+
+                if(status == "found"){
+                    if(child.id == (query + "_message")){
+                        child.style.display = "flex";
+                        label.style.display = "hidden";
+                    }
+                }
+                else{
+                    label.style.display = "block";
+                    label.innerText = status;
+                }
+            }
+            else{
+                label.style.display = "none";
+                child.style.display = "flex";
+            }
+        }
+    }
+});

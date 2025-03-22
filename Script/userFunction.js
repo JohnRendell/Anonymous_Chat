@@ -76,11 +76,48 @@ function sendMessage(){
     }
 }
 
-function globalMessageModalStatus(status){
-    var globalModal = document.getElementById("globalMessageModal");
+function modalStatus(id, status){
+    var modal = document.getElementById(id);
 
-    if(globalModal){
-        globalModal.style.display = status;
+    if(modal){
+        modal.style.display = status;
+    }
+}
+
+function searchUser(){
+    var query = document.getElementById("searchUser");
+
+    if(query){
+        socket.emit("findingUser", query.value);
+    }
+}
+
+function generateRoomCode() {
+    var inputCode = document.getElementById("roomCreationCodeInput");
+    
+    if (inputCode) {
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let generatedCode = "";
+
+        for (let i = 0; i < 5; i++) {
+            generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
+        inputCode.value = generatedCode;
+    }
+}
+
+function pickRoomType(id){
+    var roomType = document.getElementById(id);
+    var roomCode = document.getElementById("roomCreationPrivateCode");
+
+    if(roomCode){
+        if(roomType.value == "Private" && roomType.checked){
+            roomCode.style.display = "flex";
+        }
+        else{
+            roomCode.style.display = "none";
+        }
     }
 }
 

@@ -21,21 +21,22 @@
     </div>
 
     <!--Contents-->
-    <div class="w-full mt-6 h-[80%] flex flex-col overflow-x-auto overflow-y-auto items-center gap-2 p-4 max-xsm:h-[60%] md:flex-row md:h-full md:mt-0 md:gap-4 md:justify-center lg:mt-10">
+    <div class="w-full mt-10 h-[80%] flex flex-col overflow-x-auto overflow-y-auto items-center gap-4 p-4 max-xsm:h-[60%] md:flex-row md:h-full md:mt-0 md:gap-4 md:justify-center lg:mt-10">
         <!--Other stuff-->
         <div id="stuffPanel" class="w-[20rem] h-fit bg-[#D5E5D5] rounded-lg">
             <h1 class="text-center text-md text-black font-roboto p-2 font-bold w-full h-auto bg-[#cafaca]">Message list</h1>
         
             <div class="w-auto h-auto flex flex-col gap-2 p-2">
-                <input type="text" class="w-full h-auto outline-none bg-white rounded-md p-2 font-roboto text-center text-sm"
-                    placeholder="Type a name of someone to chat..." maxlength="20">
+                <input id="searchUser" type="text" class="w-full h-auto outline-none bg-white rounded-md p-2 font-roboto text-center text-sm" placeholder="Type a name of someone to chat..." maxlength="20" oninput="searchUser()">
                 
                 <div class="w-full h-[20rem] overflow-x-hidden overflow-y-auto gap-4 p-2 max-xsm:h-[10rem]" id="stuffContainer">
-                    <div class="w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer hover:bg-[#ADB2D4] group" id="globalMessageSelection" onclick="globalMessageModalStatus('flex')">
+                    <div class="w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer hover:bg-[#ADB2D4] group" id="globalMessageSelection" onclick="modalStatus('globalMessageModal','flex')">
                         <p class="group-hover:text-white text-center text-sm text-black font-roboto">Global Messages
                         </p>
                         <p id="globalMessageCounter" class="text-center text-sm text-red-500 font-roboto"></p>
                     </div>
+
+                    <h1 id="notFoundLabel" class="font-roboto text-sm text-center text-black hidden">User not found</h1>
                 </div>
             </div>
         </div>
@@ -47,7 +48,7 @@
             <div class="w-full h-auto p-2 flex flex-col gap-2">
                 <input type="text" class="w-full h-auto outline-none bg-white rounded-md p-2 font-roboto text-center text-sm" placeholder="Type a room name..." maxlength="20">
                 
-                <div class="w-full h-[20rem] overflow-x-hidden overflow-y-auto gap-4 p-2 max-xsm:h-[10rem]">
+                <div class="w-full h-[18rem] overflow-x-hidden overflow-y-auto gap-4 p-2 max-xsm:h-[10rem]">
                     <div class="w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer">
                         <p class="text-center text-sm text-black font-roboto">Test Room (Private)
                         </p>
@@ -56,6 +57,8 @@
                             Room</button>
                     </div>
                 </div>
+
+                <button class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]" onclick="modalStatus('roomCreationModal', 'flex')">Create Room</button>
             </div>
         </div>
     </div>
@@ -65,7 +68,7 @@
         <div class="w-[80%] h-auto bg-[#D5E5D5] rounded-lg md:w-[60%]">
             <div class="w-full h-auto bg-[#cafaca] p-2 flex items-center justify-between">
                 <h1 class="w-full h-full text-center text-md text-black font-roboto font-bold">Global Message</h1>
-                <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer" onclick="globalMessageModalStatus('none')">
+                <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer" onclick="modalStatus('globalMessageModal','none')">
                     <h1 class="text-red-500 font-bold text-center text-3xl">&times;</h1>
                 </div>
             </div>
@@ -82,6 +85,67 @@
                         <p id="globalInputMessageCounter" class="font-roboto text-left text-sm text-black">0/300</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Room creation Modal-->
+    <div id="roomCreationModal" class="absolute w-screen h-screen bg-black/50 justify-center items-center hidden">
+        <div class="w-[80%] h-auto bg-[#D5E5D5] rounded-lg md:w-[40%]">
+            <div class="w-full h-auto bg-[#cafaca] p-2 flex items-center justify-between">
+                <h1 class="w-full h-full text-center text-md text-black font-roboto font-bold">Create Room</h1>
+                <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer"
+                    onclick="modalStatus('roomCreationModal', 'none')">
+                    <h1 class="text-red-500 font-bold text-center text-3xl">&times;</h1>
+                </div>
+            </div>
+    
+            <div class="w-full h-auto p-2 flex flex-col gap-4 items-center">
+                <!--Room name-->
+                <div class="w-full h-auto flex justify-between items-center gap-2">
+                    <h1 class="font-roboto text-sm text-left text-black text-nowrap">Room Name</h1>
+                    <input id="roomCreationInput" type="text"
+                        class="bg-white p-2 font-roboto text-sm text-left rounded-lg w-full h-[2rem] outline-none"
+                        placeholder="Type room name..." maxlength="20"
+                        oninput="textCounter('roomCreationInput', 'roomCreationInputCounter', 20)">
+                    <p id="roomCreationInputCounter" class="font-roboto text-left text-sm text-black">0/20</p>
+                </div>
+
+                <!--Maximum-->
+                <div class="w-full h-auto flex justify-start items-center gap-2">
+                    <h1 class="font-roboto text-sm text-left text-black text-nowrap">Maximum</h1>
+                    
+                    <input type="number" min="5" max="20" value="5" class="w-[5rem] h-[2rem] bg-white rounded-md outline-none font-roboto text-sm text-center p-4">
+                </div>
+
+                <!--Room type selection-->
+                <div class="w-full h-auto flex justify-start items-center gap-2">
+                    <h1 class="font-roboto text-sm text-left text-black text-nowrap">Room Type</h1>
+                
+                    <div class="w-[50%] h-auto flex justify-evenly">
+                        <div class="w-fit h-fit gap-2 flex items-center">
+                            <input id="privateRoom" name="roomType" type="radio" value="Private" onclick="pickRoomType('privateRoom')">
+                            <label for="privateRoom" class="font-roboto text-sm text-black text-center">Private</label>
+                        </div>
+
+                        <div class="w-fit h-fit gap-2 flex items-center">
+                            <input id="publicRoom" name="roomType" type="radio" value="Public" checked onclick="pickRoomType('publicRoom')">
+                            <label for="publicRoom" class="font-roboto text-sm text-black text-center">Public</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Code if the room is private-->
+                <div id="roomCreationPrivateCode" class="w-full h-auto justify-between items-center gap-2 hidden">
+                    <h1 class="font-roboto text-sm text-left text-black text-nowrap">Room Code</h1>
+                    <input id="roomCreationCodeInput" type="text"
+                        class="bg-white p-2 font-roboto text-sm text-left rounded-lg w-full h-[2rem] outline-none"
+                        placeholder="Type room code..." maxlength="5">
+                    <button class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer text-nowrap active:bg-green-700"
+                        onclick="generateRoomCode()">Generate Code</button>
+                </div>
+
+                <button class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700" onclick="">Create</button>
             </div>
         </div>
     </div>

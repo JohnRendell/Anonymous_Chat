@@ -88,5 +88,19 @@ module.exports = (server)=>{
                 socket.to(socketID).emit("privateMessages", sender, msg);
             }
         });
+
+        //when searching for users
+        socket.on("findingUser", (query)=>{
+            let status = "";
+            let findUserIndex = users.findIndex(user => user.user === query);
+
+            if(findUserIndex > -1){
+                status = "found";
+            }
+            else{
+                status = query + " does not exist";
+            }
+            socket.emit("findingUser", query, status);
+        });
     });
 }
