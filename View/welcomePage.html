@@ -20,6 +20,9 @@
         <button class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]" onclick="logout()">Log out</button>
     </div>
 
+    <a href="https://github.com/JohnRendell/Anonymous_Chat" target="_blank"
+        class="absolute bottom-2 left-2 font-roboto text-left text-sm underline">Developed by John Rendell Catuiza</a>
+
     <!--Contents-->
     <div class="w-full mt-10 h-[80%] flex flex-col overflow-x-auto overflow-y-auto items-center gap-4 p-4 max-xsm:h-[60%] md:flex-row md:h-full md:mt-0 md:gap-4 md:justify-center lg:mt-10">
         <!--Other stuff-->
@@ -48,15 +51,7 @@
             <div class="w-full h-auto p-2 flex flex-col gap-2">
                 <input type="text" class="w-full h-auto outline-none bg-white rounded-md p-2 font-roboto text-center text-sm" placeholder="Type a room name..." maxlength="20">
                 
-                <div class="w-full h-[18rem] overflow-x-hidden overflow-y-auto gap-4 p-2 max-xsm:h-[10rem]">
-                    <div class="w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer">
-                        <p class="text-center text-sm text-black font-roboto">Test Room (Private)
-                        </p>
-                        <button
-                            class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]">Join
-                            Room</button>
-                    </div>
-                </div>
+                <div id="roomContainer" class="w-full h-[18rem] flex flex-col overflow-x-hidden overflow-y-auto gap-4 p-2 max-xsm:h-[10rem]"></div>
 
                 <button class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]" onclick="modalStatus('roomCreationModal', 'flex')">Create Room</button>
             </div>
@@ -115,7 +110,7 @@
                 <div class="w-full h-auto flex justify-start items-center gap-2">
                     <h1 class="font-roboto text-sm text-left text-black text-nowrap">Maximum</h1>
                     
-                    <input type="number" min="5" max="20" value="5" class="w-[5rem] h-[2rem] bg-white rounded-md outline-none font-roboto text-sm text-center p-4">
+                    <input id="maxRoomUser" type="number" min="5" max="20" value="5" class="w-[5rem] h-[2rem] bg-white rounded-md outline-none font-roboto text-sm text-center p-4">
                 </div>
 
                 <!--Room type selection-->
@@ -145,7 +140,7 @@
                         onclick="generateRoomCode()">Generate Code</button>
                 </div>
 
-                <button class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700" onclick="">Create</button>
+                <button class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700" onclick="createRoom()">Create</button>
             </div>
         </div>
     </div>

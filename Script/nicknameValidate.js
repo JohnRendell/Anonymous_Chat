@@ -1,5 +1,3 @@
-let divPopUpCount = 0;
-
 async function submitNickname(){
     var input = document.getElementById("nicknameInputID");
     var loadingValidate = document.getElementById("loadingValidate");

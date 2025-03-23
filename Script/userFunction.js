@@ -109,14 +109,60 @@ function generateRoomCode() {
 
 function pickRoomType(id){
     var roomType = document.getElementById(id);
-    var roomCode = document.getElementById("roomCreationPrivateCode");
+    var roomCodeDiv = document.getElementById("roomCreationPrivateCode");
 
-    if(roomCode){
+    if(roomCodeDiv){
         if(roomType.value == "Private" && roomType.checked){
-            roomCode.style.display = "flex";
+            roomCodeDiv.style.display = "flex";
         }
         else{
-            roomCode.style.display = "none";
+            roomCodeDiv.style.display = "none";
+        }
+    }
+}
+
+function createRoom(){
+    var roomName = document.getElementById("roomCreationInput");
+    var maxRoomCount = document.getElementById("maxRoomUser");
+    var privateRoomType = document.getElementById("privateRoom");
+    var publicRoomType = document.getElementById("publicRoom");
+    var roomCodeID = document.getElementById("roomCreationCodeInput");
+
+    if(roomName && maxRoomCount && privateRoomType && publicRoomType && roomCodeID){
+        if(!roomName.value){
+            div_popUp("Room name is empty.");
+            divPopUpCount++;
+        }
+        else if (!maxRoomCount.value.trim() || isNaN(maxRoomCount.value) || parseInt(maxRoomCount.value) != maxRoomCount.value) {
+            div_popUp("Room count must be a number and it should not be empty.");
+            divPopUpCount++;
+        } 
+        else if (parseInt(maxRoomCount.value) < 5 || parseInt(maxRoomCount.value) > 20) {
+            div_popUp("Room should be between five and twenty.");
+            divPopUpCount++;
+        }
+        else if(roomName.value.length <= 3){
+            div_popUp("Room name is too short, minimum of four characters.");
+            divPopUpCount++;
+        }
+        else if(privateRoomType.checked && !roomCodeID.value){
+            div_popUp("Room code cannot be empty if the type is set to private.");
+            divPopUpCount++;
+        }
+        else if(privateRoomType.checked && roomCodeID.value.length <= 4){
+            div_popUp("Room code should be max at five characters.");
+            divPopUpCount++;
+        }
+        else{
+            let roomData = { roomName: roomName.value, max: maxRoomCount.value, type: privateRoomType.checked ? "private" : "public", roomCode: privateRoomType.checked ? roomCodeID.value : "none" };
+
+            var validationDiv = document.getElementById("loadingValidate");
+
+            if(validationDiv){
+                validationDiv.style.display = "flex";
+            }
+
+            socket.emit("create_room", roomData);
         }
     }
 }

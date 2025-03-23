@@ -1,11 +1,12 @@
 let users = [];
 let nickname_list = [];
+let room_list = [];
 
 module.exports = (server)=>{
     server.on("connection", (socket)=>{
         console.log("socket connected: " + socket.id);
         console.table(users);
-        console.log(nickname_list);
+        console.table(room_list);
 
         //for reloading page
         socket.on("pageRefresh", (nickname)=>{
@@ -101,6 +102,30 @@ module.exports = (server)=>{
                 status = query + " does not exist";
             }
             socket.emit("findingUser", query, status);
+        });
+
+        //when making room
+        socket.on("create_room", (roomData)=>{
+            const checkRoom = room_list.findIndex(room => room.roomName == roomData.roomName);
+            let status = "";
+
+            if(checkRoom > -1){
+                status = roomData.roomName + " is already exist.";
+            }
+            else{
+                status = "success";
+                room_list.push(roomData);
+            }
+            socket.emit("create_room", status);
+        });
+
+        //displaying rooms
+        socket.on("displayRoom", ()=>{
+            let room_displayList = room_list.map(room=>({
+                roomName: room.roomName,
+                roomType: room.type
+            }));
+            server.emit("displayRoom", room_displayList);
         });
     });
 }

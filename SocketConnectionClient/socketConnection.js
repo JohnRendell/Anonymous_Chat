@@ -8,6 +8,7 @@ socket.on("connect", ()=>{
         socketID.innerText = "Socket ID: " + socket.id;
     }
     socket.emit("list_users");
+    socket.emit("displayRoom");
 });
 
 socket.on("registerNickname", async (nickname, status)=>{

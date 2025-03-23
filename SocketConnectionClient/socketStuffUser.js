@@ -238,5 +238,75 @@ socket.on("findingUser", (query, status)=>{
                 child.style.display = "flex";
             }
         }
+
+        if(query.length == 0){
+            label.style.display = "none";
+        }
     }
 });
+
+//for room display
+socket.on("displayRoom", (roomList)=>{
+    var roomContainer = document.getElementById("roomContainer"); 
+
+    if(roomContainer){
+        roomList.forEach(room => {
+            let roomName = room.roomName;
+            let roomType = room.roomType;
+            var checkRoom = document.getElementById(roomName + "_room");
+
+            if(!checkRoom){
+                var roomWrapper = document.createElement("div");
+                roomWrapper.setAttribute("class", "w-full h-[2rem] bg-transparent flex justify-between items-center p-2 cursor-pointer");
+                roomWrapper.setAttribute("id", roomName + "_room");
+                roomContainer.appendChild(roomWrapper);
+
+                var roomLabel = document.createElement("p");
+                roomLabel.setAttribute("class", "text-center text-sm text-black font-roboto");
+                roomLabel.appendChild(document.createTextNode(roomType == "private" ? roomName + " (Private)" : roomName));
+                roomWrapper.appendChild(roomLabel);
+
+                var joinButton = document.createElement("button");
+                joinButton.setAttribute("class", "bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]");
+                joinButton.appendChild(document.createTextNode("Join Room"));
+                roomWrapper.appendChild(joinButton);
+            }
+        });
+    }
+});
+
+socket.on("create_room", (status)=>{
+    var validationDiv = document.getElementById("loadingValidate");
+
+    if(validationDiv){
+        validationDiv.style.display = "none";
+    }
+
+    if(status === "success"){
+        socket.emit("displayRoom");
+
+        //clear the inputs
+        var roomCodeDiv = document.getElementById("roomCreationPrivateCode");
+        var roomName = document.getElementById("roomCreationInput");
+        var maxRoomCount = document.getElementById("maxRoomUser");
+        var privateRoomType = document.getElementById("privateRoom");
+        var publicRoomType = document.getElementById("publicRoom");
+        var roomCodeID = document.getElementById("roomCreationCodeInput");
+        var roomNameCounter = document.getElementById("roomCreationInputCounter")
+
+        if(roomCodeDiv && roomName && roomNameCounter && maxRoomCount && privateRoomType && publicRoomType && roomCodeID){
+            roomName.value = "";
+            maxRoomCount.value = "5";
+            privateRoomType.checked = false;
+            publicRoomType.checked = true;
+            roomCodeID.value = "";
+            roomCodeDiv.style.display = "none";
+            roomNameCounter.innerText = "0/20";
+        }
+        modalStatus('roomCreationModal', 'none');
+    }
+    else{
+        div_popUp(status);
+        divPopUpCount++;
+    }
+})
