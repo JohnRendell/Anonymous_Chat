@@ -26,7 +26,7 @@ socket.on("registerNickname", async (nickname, status)=>{
                     "Accept": "application/json",
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ nickname: nickname })
+                body: JSON.stringify({ data: nickname, cookieType: "token" })
             });
 
             const setCookie_data = await setCookie.json();

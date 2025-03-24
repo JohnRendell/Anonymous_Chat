@@ -122,8 +122,11 @@ module.exports = (server)=>{
         //displaying rooms
         socket.on("displayRoom", ()=>{
             let room_displayList = room_list.map(room=>({
+                roomOwner: room.roomOwner,
                 roomName: room.roomName,
-                roomType: room.type
+                roomType: room.type,
+                roomMax: room.max,
+                roomCode: room.roomCode
             }));
             server.emit("displayRoom", room_displayList);
         });

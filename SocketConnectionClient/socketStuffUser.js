@@ -251,8 +251,11 @@ socket.on("displayRoom", (roomList)=>{
 
     if(roomContainer){
         roomList.forEach(room => {
+            let roomOwner = room.roomOwner;
             let roomName = room.roomName;
             let roomType = room.roomType;
+            let roomMax = room.roomMax;
+            let roomCode = room.roomCode;
             var checkRoom = document.getElementById(roomName + "_room");
 
             if(!checkRoom){
@@ -268,6 +271,7 @@ socket.on("displayRoom", (roomList)=>{
 
                 var joinButton = document.createElement("button");
                 joinButton.setAttribute("class", "bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]");
+                joinButton.setAttribute("onclick", `getRoomData('${roomOwner}', '${roomName}', '${roomType}', '${roomMax}', '${roomCode}')`);
                 joinButton.appendChild(document.createTextNode("Join Room"));
                 roomWrapper.appendChild(joinButton);
             }

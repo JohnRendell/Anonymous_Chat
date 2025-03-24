@@ -35,13 +35,20 @@ function div_popUp(text){
 }
 
 //cookie stuff
-async function deleteCookie() {
+async function deleteCookie(cookieType) {
     try{
         const clearCookie = await fetch("/cookieStatus/deleteCookie", {
-            method: "GET"
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ cookieType: cookieType })
         });
 
-        if(!clearCookie.ok){
+        const clearCookie_data = await clearCookie.json();
+
+        if(clearCookie_data.message !== "success"){
             alert("Deleting cookie failed");
         }
     }
@@ -50,14 +57,21 @@ async function deleteCookie() {
     }
 }
 
-async function getCookie() {
+async function getCookie(cookieType) {
     try{
         const readCookie = await fetch("/cookieStatus/getCookie", {
-            method: "GET",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ cookieType: cookieType })
         });
 
-        if(readCookie.ok){
-            let readCookieText = await readCookie.text();
+        const readCookie_data = await readCookie.json();
+
+        if(readCookie_data.message === "success"){
+            let readCookieText = readCookie_data.data;
             return readCookieText;
         }
     }
@@ -66,9 +80,9 @@ async function getCookie() {
     }
 }
 
-async function hasCookie(){
+async function hasCookie(cookieType){
     try{
-        let text = await getCookie();
+        let text = await getCookie(cookieType);
 
         if(text === "No Cookie"){
             socket.emit("user_logout", socket.id, "index_page");

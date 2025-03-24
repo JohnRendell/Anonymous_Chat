@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room</title>
+
+    <!--Libraries-->
+    <script src="/socket.io/socket.io.min.js"></script>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/animation.css">
+</head>
+
+<body class="bg-[#C7D9DD] w-screen h-screen flex flex-col justify-center gap-2 items-center overflow-hidden">
+    <div class="absolute top-0 bg-[#D5E5D5] w-full h-auto p-4 flex justify-between items-center">
+        <div class="flex flex-col gap-2 w-full">
+            <p class="font-roboto text-md text-center text-black" id="welcomeHeader">Welcome</p>
+            <p class="font-roboto text-sm text-center text-black" id="socketID">Socket ID: </p>
+        </div>
+
+        <button
+            class="bg-[#ADB2D4] w-auto h-auto p-2 rounded-lg font-roboto text-center text-sm text-white cursor-pointer text-nowrap active:bg-[#8f98db]"
+            onclick="logout()">Log out</button>
+    </div>
+
+    <a href="https://github.com/JohnRendell/Anonymous_Chat" target="_blank"
+        class="absolute bottom-2 left-2 font-roboto text-left text-sm underline">Developed by John Rendell Catuiza</a>
+
+    <!--Contents-->
+    <div class="w-full mt-10 h-[80%] flex justify-center items-center gap-4 p-4 max-xsm:h-[60%] md:h-full md:flex-row">
+        <!--Room Info-->
+        <div class="w-[30%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col items-center gap-2">
+            <h1 class="font-roboto text-center text-sm text-black">Room Information</h1>
+        
+            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-4">
+                <p id="roomOwner_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                <p id="roomTitle_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                <p id="roomType_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                <p id="roomMax_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                <p id="roomCode_info" class="font-roboto text-left text-sm text-black">Room title</p>
+            </div>
+
+            <button class="font-roboto text-sm bg-red-500 text-center text-white w-fit h-fit p-2 rounded-lg cursor-pointer active:bg-red-700" onclick="leaveRoom()">Leave</button>
+        </div>
+
+        <!--Room Messages-->
+        <div class="w-[50%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col gap-2">
+            <h1 id="roomTitle" class="font-roboto text-center text-sm text-black">Room title</h1>
+
+            <!--Content messages-->
+            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg"></div>
+
+            <!--Input messages-->
+            <div class="w-full h-auto flex justify-between items-center gap-4">
+                <textarea id="roomMessageInput" type="text"
+                    class="bg-white p-4 font-roboto text-sm text-left rounded-lg w-full h-[4rem] outline-none"
+                    placeholder="Type Message..." maxlength="300"
+                    oninput="textCounter('roomMessageInput', 'roomInputMessageCounter', 300)"></textarea>
+                <div class="flex flex-col gap-2 items-center">
+                    <button
+                        class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700"
+                        onclick="">Send</button>
+                    <p id="roomInputMessageCounter" class="font-roboto text-left text-sm text-black">0/300</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Global Message Modal-->
+    <div id="globalMessageModal" class="absolute w-screen h-screen bg-black/50 justify-center items-center hidden">
+        <div class="w-[80%] h-auto bg-[#D5E5D5] rounded-lg md:w-[60%]">
+            <div class="w-full h-auto bg-[#cafaca] p-2 flex items-center justify-between">
+                <h1 class="w-full h-full text-center text-md text-black font-roboto font-bold">Global Message</h1>
+                <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer"
+                    onclick="modalStatus('globalMessageModal','none')">
+                    <h1 class="text-red-500 font-bold text-center text-3xl">&times;</h1>
+                </div>
+            </div>
+
+            <div class="w-full h-auto p-2 flex flex-col gap-2">
+                <!--Content messages-->
+                <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-md overflow-x-hidden overflow-y-auto scroll-smooth flex flex-col gap-4 p-2 max-xsm:h-[10rem]"
+                    id="globalMessageContainer"></div>
+
+                <!--Input messages-->
+                <div class="w-full h-auto flex justify-between items-center gap-4">
+                    <textarea id="globalMessageInput" type="text"
+                        class="bg-white p-4 font-roboto text-sm text-left rounded-lg w-full h-[4rem] outline-none"
+                        placeholder="Type Message..." maxlength="300"
+                        oninput="textCounter('globalMessageInput', 'globalInputMessageCounter', 300)"></textarea>
+                    <div class="flex flex-col gap-2 items-center">
+                        <button
+                            class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700"
+                            onclick="sendMessage()">Send</button>
+                        <p id="globalInputMessageCounter" class="font-roboto text-left text-sm text-black">0/300</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Validation loading-->
+    <div class="absolute w-screen h-screen bg-black/25 justify-center items-center hidden" id="loadingValidate">
+        <div class="w-auto h-auto p-4 rounded-sm bg-white flex flex-col items-center gap-4">
+            <p class="font-roboto text-center text-black text-sm">Validating...</p>
+            <span class="loader"></span>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="/socketConnection.js"></script>
+<script src="/globalFunction.js"></script>
+<script src="/userFunction.js"></script>
+<script src="/socketStuffUser.js"></script>
+<script src="/roomFunction.js"></script>

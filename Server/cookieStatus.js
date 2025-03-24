@@ -7,23 +7,39 @@ require("dotenv").config({ path: path.resolve(__dirname, "../keys.env")});
 route.use(cookieParser(process.env.COOKIE_KEY));
 
 route.post("/setCookie", (req, res)=>{
-    let nickname = req.body.nickname;
-    res.cookie("token", nickname, { signed: true, secure: true, maxAge: 360000, path: "/" }).status(200).json({ message: "success" });
+    let cookieType = req.body.cookieType;
+    let cookieData = req.body.data;
+
+    if(cookieData && cookieType){
+        res.cookie(cookieType, cookieData, { signed: true, secure: true, maxAge: 360000, path: "/" }).status(200).json({ message: "success" });
+    }
 });
 
-route.get("/getCookie", (req, res)=>{
+route.post("/getCookie", (req, res)=>{
     let nickname = req.signedCookies.token;
+    let room = req.signedCookies.roomToken;
+    let cookieType = req.body.cookieType;
+    let cookieData = "No Cookie";
 
-    if(nickname){
-        res.status(200).send(nickname);
+    if(cookieType === "token" && nickname){
+        cookieData = nickname;   
     }
-    else{
-        res.status(200).send("No Cookie");
+
+    if(cookieType === "roomToken" && room){
+        cookieData = room;
     }
+    
+    res.status(200).json({ message: "success" , data: cookieData });
 });
 
-route.get("/deleteCookie", (req, res)=>{
-    res.status(200).clearCookie("token").send("Cookie has been cleared");
+route.post("/deleteCookie", (req, res)=>{
+    try{
+        let cookieType = req.body.cookieType;    
+        res.status(200).clearCookie(cookieType).json({ message: "success" });
+    }
+    catch(err){
+        res.status(200).json({ message: "failed" });
+    }
 });
 
 module.exports = route;

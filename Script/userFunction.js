@@ -1,7 +1,7 @@
 var global_sender;
 
-async function readCookie() {
-    let text = await getCookie();
+async function readTokenCookie() {
+    let text = await getCookie("token");
     var welcomeHeader = document.getElementById("welcomeHeader");
 
     if(text && welcomeHeader){
@@ -12,7 +12,7 @@ async function readCookie() {
 
 async function user_pageRefresh() {
     try{
-        let text = await getCookie();
+        let text = await getCookie("token");
 
         if(text === "No Cookie"){
             socket.emit("user_leave", global_sender);
@@ -36,7 +36,8 @@ async function logout() {
     }
     socket.emit("user_logout", socket.id, "welcomePage");
     socket.emit("user_leave", global_sender);
-    deleteCookie();
+    deleteCookie("token");
+    deleteCookie("roomToken");
 }
 
 function sendMessage(){
@@ -154,7 +155,7 @@ function createRoom(){
             divPopUpCount++;
         }
         else{
-            let roomData = { roomName: roomName.value, max: maxRoomCount.value, type: privateRoomType.checked ? "private" : "public", roomCode: privateRoomType.checked ? roomCodeID.value : "none" };
+            let roomData = { roomOwner: global_sender, roomName: roomName.value, max: maxRoomCount.value, type: privateRoomType.checked ? "private" : "public", roomCode: privateRoomType.checked ? roomCodeID.value : "none" };
 
             var validationDiv = document.getElementById("loadingValidate");
 
@@ -167,5 +168,76 @@ function createRoom(){
     }
 }
 
-readCookie();
+let tempRoomData = {};
+async function getRoomData(roomOwner, roomName, roomType, roomMax, roomCode){
+    var validate = document.getElementById("loadingValidate");
+    var roomTitle = document.getElementById("roomTitle");
+
+    if(validate){
+        validate.style.display = "flex";
+    }
+
+    if(roomTitle){
+        roomTitle.innerText = roomName;
+        tempRoomData = roomCode;
+    }
+
+    let cookieData = {
+        roomOwner: roomOwner,
+        roomName: roomName,
+        roomType: roomType,
+        roomMax: roomMax,
+        roomCode: roomCode
+    }
+
+    tempRoomData = cookieData;
+
+    if(roomType == "private"){
+        if(validate){
+            validate.style.display = "none";
+        }
+        modalStatus("roomCodeModal", "flex");
+    }
+    else{
+        redirectToRoom();
+    }
+}
+
+async function redirectToRoom() {
+    try{
+        const setRoomCookie = await fetch("/cookieStatus/setCookie", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ data: tempRoomData, cookieType: "roomToken" })
+        });
+
+        const setRoomCookie_data = await setRoomCookie.json();
+
+        if(setRoomCookie_data.message === "success"){
+            window.location.href = "/Welcome/Room/" + tempRoomData.roomName;
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+async function validateRoomCode() {
+    var roomCodeInput = document.getElementById("roomCodeInput");
+
+    if(roomCodeInput){
+        if(roomCodeInput.value == tempRoomData.roomCode){
+            redirectToRoom();
+        }
+        else{
+            div_popUp("Wrong room code");
+            divPopUpCount++;
+        }
+    }
+}
+
+readTokenCookie();
 user_pageRefresh();
