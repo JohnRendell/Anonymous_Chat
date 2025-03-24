@@ -283,14 +283,8 @@
   .w-\[50\%\] {
     width: 50%;
   }
-  .w-\[50\] {
-    width: 50;
-  }
   .w-\[80\%\] {
     width: 80%;
-  }
-  .w-\[full\] {
-    width: full;
   }
   .w-auto {
     width: auto;

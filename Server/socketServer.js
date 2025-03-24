@@ -117,6 +117,19 @@ module.exports = (server)=>{
                 room_list.push(roomData);
             }
             socket.emit("create_room", status);
+            console.table(room_list);
+        });
+
+        socket.on("leave_room", (roomName, roomOwner)=>{
+            const roomIndex = room_list.findIndex(room => room.roomName == roomName);
+
+            if(roomIndex > -1){
+                if(room_list[roomIndex].roomOwner == roomOwner){
+                    socket.broadcast.emit("remove_room", room_list[roomIndex].roomName);
+                    room_list.splice(roomIndex, 1);
+                }
+            }
+            console.table(room_list);
         });
 
         //displaying rooms

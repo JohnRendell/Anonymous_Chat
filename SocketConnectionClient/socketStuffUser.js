@@ -279,6 +279,22 @@ socket.on("displayRoom", (roomList)=>{
     }
 });
 
+//for removing room
+socket.on("remove_room", (roomName)=>{
+    var checkRoom = document.getElementById(roomName + "_room");
+
+    if(checkRoom){
+        checkRoom.remove();
+    }
+    else{
+        alert("Room has been deleted by the owner. Click OK to continue.");
+        
+        setTimeout(() => {
+            window.location.href = "/Welcome/Home/" + global_sender;
+        }, 500);
+    }
+});
+
 socket.on("create_room", (status)=>{
     var validationDiv = document.getElementById("loadingValidate");
 

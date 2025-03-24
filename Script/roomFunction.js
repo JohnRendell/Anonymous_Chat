@@ -1,3 +1,5 @@
+let global_roomName;
+
 async function roomInformation(){
     let text = await getCookie("roomToken");
     let roomTitle = document.getElementById("roomTitle");
@@ -20,11 +22,13 @@ async function roomInformation(){
             roomMax.innerText = "Max: " + text.roomMax;
             roomCode.innerText = "Room Code: " + text.roomCode;
         }
+        global_roomName = text.roomName;
     }
 }
 
 function leaveRoom(){
     deleteCookie("roomToken");
+    socket.emit("leave_room", global_roomName, global_sender);
     window.location.href = "/welcome/Home/" + global_sender;
 }
 
