@@ -116,7 +116,8 @@ module.exports = (server)=>{
                 status = "success";
                 room_list.push(roomData);
             }
-            socket.emit("create_room", status);
+
+            socket.emit("create_room", status, roomData);
             console.table(room_list);
         });
 

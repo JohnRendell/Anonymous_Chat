@@ -8,6 +8,8 @@ async function roomInformation(){
         document.title = text.roomName;
         roomTitle.innerText = text.roomName;
 
+        socket.emit("create_room", text);
+
         //display all info
         let roomOwner = document.getElementById("roomOwner_info");
         let roomName = document.getElementById("roomTitle_info");
@@ -18,8 +20,8 @@ async function roomInformation(){
         if(roomName && roomType && roomMax && roomCode){
             roomOwner.innerText = "Room Owner: " + text.roomOwner;
             roomName.innerText = "Room name: " + text.roomName;
-            roomType.innerText = "Type: " + text.roomType;
-            roomMax.innerText = "Max: " + text.roomMax;
+            roomType.innerText = "Type: " + text.type;
+            roomMax.innerText = "Max: " + text.max;
             roomCode.innerText = "Room Code: " + text.roomCode;
         }
         global_roomName = text.roomName;

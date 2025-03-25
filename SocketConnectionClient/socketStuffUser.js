@@ -295,7 +295,7 @@ socket.on("remove_room", (roomName)=>{
     }
 });
 
-socket.on("create_room", (status)=>{
+socket.on("create_room", async (status, roomList)=>{
     var validationDiv = document.getElementById("loadingValidate");
 
     if(validationDiv){
@@ -304,6 +304,7 @@ socket.on("create_room", (status)=>{
 
     if(status === "success"){
         socket.emit("displayRoom");
+        redirectToRoom(roomList);
 
         //clear the inputs
         var roomCodeDiv = document.getElementById("roomCreationPrivateCode");
@@ -326,7 +327,11 @@ socket.on("create_room", (status)=>{
         modalStatus('roomCreationModal', 'none');
     }
     else{
-        div_popUp(status);
-        divPopUpCount++;
+        let text = await getCookie("roomToken");
+
+        if(text === "No Cookie"){
+            div_popUp(status);
+            divPopUpCount++;
+        }
     }
 })

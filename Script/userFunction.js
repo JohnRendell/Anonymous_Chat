@@ -1,4 +1,5 @@
 var global_sender;
+let tempRoomData = {};
 
 async function readTokenCookie() {
     let text = await getCookie("token");
@@ -168,7 +169,6 @@ function createRoom(){
     }
 }
 
-let tempRoomData = {};
 async function getRoomData(roomOwner, roomName, roomType, roomMax, roomCode){
     var validate = document.getElementById("loadingValidate");
     var roomTitle = document.getElementById("roomTitle");
@@ -185,8 +185,8 @@ async function getRoomData(roomOwner, roomName, roomType, roomMax, roomCode){
     let cookieData = {
         roomOwner: roomOwner,
         roomName: roomName,
-        roomType: roomType,
-        roomMax: roomMax,
+        type: roomType,
+        max: roomMax,
         roomCode: roomCode
     }
 
@@ -199,11 +199,11 @@ async function getRoomData(roomOwner, roomName, roomType, roomMax, roomCode){
         modalStatus("roomCodeModal", "flex");
     }
     else{
-        redirectToRoom();
+        redirectToRoom(tempRoomData);
     }
 }
 
-async function redirectToRoom() {
+async function redirectToRoom(roomData) {
     try{
         const setRoomCookie = await fetch("/cookieStatus/setCookie", {
             method: "POST",
@@ -211,13 +211,13 @@ async function redirectToRoom() {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({ data: tempRoomData, cookieType: "roomToken" })
+            body: JSON.stringify({ data: roomData, cookieType: "roomToken" })
         });
 
         const setRoomCookie_data = await setRoomCookie.json();
 
         if(setRoomCookie_data.message === "success"){
-            window.location.href = "/Welcome/Room/" + tempRoomData.roomName;
+            window.location.href = "/Welcome/Room/" + roomData.roomName;
         }
     }
     catch(err){
@@ -230,7 +230,7 @@ async function validateRoomCode() {
 
     if(roomCodeInput){
         if(roomCodeInput.value == tempRoomData.roomCode){
-            redirectToRoom();
+            redirectToRoom(tempRoomData);
         }
         else{
             div_popUp("Wrong room code");
