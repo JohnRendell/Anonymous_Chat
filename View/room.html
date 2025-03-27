@@ -27,29 +27,43 @@
     <a href="https://github.com/JohnRendell/Anonymous_Chat" target="_blank"
         class="absolute bottom-2 left-2 font-roboto text-left text-sm underline">Developed by John Rendell Catuiza</a>
 
+    <!--Info button for mobile only-->
+    <button class="absolute top-25 left-4 bg-green-500 w-fit h-fit p-2 rounded-lg text-center text-white font-roboto active:bg-green-700 md:hidden" onclick="modalStatus('roomInfo', 'flex')">Show info</button>
+
     <!--Contents-->
     <div class="w-full mt-10 h-[80%] flex justify-center items-center gap-4 p-4 max-xsm:h-[60%] md:h-full md:flex-row">
-        <!--Room Info-->
-        <div class="w-[30%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col items-center gap-2">
-            <h1 class="font-roboto text-center text-sm text-black">Room Information</h1>
         
-            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-4">
-                <p id="roomOwner_info" class="font-roboto text-left text-sm text-black">Room title</p>
-                <p id="roomTitle_info" class="font-roboto text-left text-sm text-black">Room title</p>
-                <p id="roomType_info" class="font-roboto text-left text-sm text-black">Room title</p>
-                <p id="roomMax_info" class="font-roboto text-left text-sm text-black">Room title</p>
-                <p id="roomCode_info" class="font-roboto text-left text-sm text-black">Room title</p>
+        <!--Room Info-->
+        <div id="roomInfo" class="absolute top-0 w-screen h-screen bg-black/50 justify-center items-center hidden md:flex md:relative md:w-[30%] md:h-fit md:bg-transparent">
+            <div class="w-[80%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col items-center gap-2 md:w-full">
+                <div class="w-full h-auto flex items-center justify-between">
+                    <h1 class="w-full h-full text-center text-sm text-black font-roboto">Room Information</h1>
+                    <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer md:hidden"
+                        onclick="modalStatus('roomInfo','none')">
+                        <h1 class="text-red-500 font-bold text-center text-3xl">&times;</h1>
+                    </div>
+                </div>
+            
+                <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-4">
+                    <p id="roomOwner_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                    <p id="roomTitle_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                    <p id="roomType_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                    <p id="roomMax_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                    <p id="roomCode_info" class="font-roboto text-left text-sm text-black">Room title</p>
+                </div>
+            
+                <button
+                    class="font-roboto text-sm bg-red-500 text-center text-white w-fit h-fit p-2 rounded-lg cursor-pointer active:bg-red-700"
+                    onclick="leaveRoom()">Leave</button>
             </div>
-
-            <button class="font-roboto text-sm bg-red-500 text-center text-white w-fit h-fit p-2 rounded-lg cursor-pointer active:bg-red-700" onclick="leaveRoom()">Leave</button>
         </div>
 
         <!--Room Messages-->
-        <div class="w-[50%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col gap-2">
+        <div class="w-[80%] h-fit bg-[#D5E5D5] rounded-lg p-2 flex flex-col gap-2 mt-10 md:mt-0 md:w-[50%]">
             <h1 id="roomTitle" class="font-roboto text-center text-sm text-black">Room title</h1>
 
             <!--Content messages-->
-            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-2 flex flex-col overflow-x-hidden overflow-y-auto scroll-smooth gap-4" id="roomContainerMsg"></div>
+            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-2 flex flex-col overflow-x-hidden overflow-y-auto scroll-smooth gap-4 max-xsm:h-[10rem]" id="roomContainerMsg"></div>
 
             <!--Input messages-->
             <div class="w-full h-auto flex justify-between items-center gap-4">
