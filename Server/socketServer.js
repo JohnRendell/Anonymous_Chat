@@ -4,9 +4,7 @@ let room_list = [];
 
 module.exports = (server)=>{
     server.on("connection", (socket)=>{
-        console.log("socket connected: " + socket.id);
-        console.table(users);
-        console.table(room_list);
+        console.log("socket connected: " + socket.id);;
 
         //for reloading page
         socket.on("pageRefresh", (nickname)=>{
@@ -71,7 +69,11 @@ module.exports = (server)=>{
                 users.push(data);
             }
             socket.emit("registerNickname", nickname, status);
-            console.table(users);
+        });
+
+        //while typing
+        socket.on("while_typing", (containerID, sender, inputLength)=>{
+            socket.broadcast.emit("while_typing", containerID, sender, inputLength);
         });
 
         //sending global messages
@@ -104,6 +106,20 @@ module.exports = (server)=>{
             socket.emit("findingUser", query, status);
         });
 
+        //when searching for rooms
+        socket.on("findingRoom", (query)=>{
+            let status = "";
+            let findUserIndex = room_list.findIndex(room => room.roomName === query);
+
+            if(findUserIndex > -1){
+                status = "found";
+            }
+            else{
+                status = query + " does not exist";
+            }
+            socket.emit("findingRoom", query, status);
+        });
+
         //when making room
         socket.on("create_room", (roomData)=>{
             const checkRoom = room_list.findIndex(room => room.roomName == roomData.roomName);
@@ -126,11 +142,12 @@ module.exports = (server)=>{
 
             if(roomIndex > -1){
                 if(room_list[roomIndex].roomOwner == roomOwner){
-                    socket.broadcast.emit("remove_room", room_list[roomIndex].roomName);
+                    socket.to(room_list[roomIndex].roomName).emit("remove_room", room_list[roomIndex].roomName);
+
+                    socket.leave(room_list[roomIndex].roomName);
                     room_list.splice(roomIndex, 1);
                 }
             }
-            console.table(room_list);
         });
 
         //displaying rooms
@@ -144,5 +161,16 @@ module.exports = (server)=>{
             }));
             server.emit("displayRoom", room_displayList);
         });
+
+        //joining players on a room
+        socket.on("join_room", (room, user)=>{
+            socket.join(room);
+            socket.to(room).emit("join_room", user);
+        });
+
+        //sending messages on a room
+        socket.on("send_message_room", (room, sender, msg)=>{
+            socket.to(room).emit("send_message_room", sender, msg);
+        })
     });
 }

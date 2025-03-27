@@ -110,7 +110,7 @@ function createUserModal(user){
         modalInput.setAttribute("type", "text");
         modalInput.setAttribute("placeholder", "Type Message...");
         modalInput.setAttribute("maxlength", "300");
-        modalInput.setAttribute("oninput", `textCounter('${user}MessageInput', '${user}InputMessageCounter', 300)`);
+        modalInput.setAttribute("oninput", `textCounter('${user}MessageInput', '${user}InputMessageCounter', 300); whileTyping('${global_sender}MessageContents', '${user}MessageInput')`);
         modalInputWrapper.appendChild(modalInput);
 
         var modalButtonWrapper = document.createElement("div");
@@ -167,6 +167,7 @@ socket.on("list_users", (activeUsers)=>{
 //when user receive a message
 socket.on("privateMessages", (receiver, msg)=>{
     var container = document.getElementById(`${receiver}MessageContents`);
+    var divType = document.getElementById(receiver + "_typingID");
     
     if(container){
         var getAlert = document.getElementById(`${receiver}_alert`);
@@ -199,6 +200,10 @@ socket.on("privateMessages", (receiver, msg)=>{
 
         container.scrollTo(0, container.scrollHeight);
     }
+
+    if(divType){
+        divType.remove();
+    }
 });
 
 //when user leave
@@ -224,6 +229,41 @@ socket.on("findingUser", (query, status)=>{
 
                 if(status == "found"){
                     if(child.id == (query + "_message")){
+                        child.style.display = "flex";
+                        label.style.display = "hidden";
+                    }
+                }
+                else{
+                    label.style.display = "block";
+                    label.innerText = status;
+                }
+            }
+            else{
+                label.style.display = "none";
+                child.style.display = "flex";
+            }
+        }
+
+        if(query.length == 0){
+            label.style.display = "none";
+        }
+    }
+});
+
+//for searching room
+socket.on("findingRoom", (query, status)=>{
+    var container = document.getElementById("roomContainer");
+    var label = document.getElementById("notFoundRoomLabel");
+
+    if(container && label){
+        var containerChild = Array.from(container.children);
+
+        for(let child of containerChild){
+            if(query){
+                child.style.display = "none";
+
+                if(status == "found"){
+                    if(child.id == (query + "_room")){
                         child.style.display = "flex";
                         label.style.display = "hidden";
                     }
@@ -334,4 +374,4 @@ socket.on("create_room", async (status, roomList)=>{
             divPopUpCount++;
         }
     }
-})
+});

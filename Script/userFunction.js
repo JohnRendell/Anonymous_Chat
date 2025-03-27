@@ -1,4 +1,5 @@
 var global_sender;
+
 let tempRoomData = {};
 
 async function readTokenCookie() {
@@ -91,6 +92,14 @@ function searchUser(){
 
     if(query){
         socket.emit("findingUser", query.value);
+    }
+}
+
+function searchRoom(){
+    var query = document.getElementById("searchRoom");
+
+    if(query){
+        socket.emit("findingRoom", query.value);
     }
 }
 

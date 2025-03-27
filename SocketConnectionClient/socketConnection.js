@@ -47,6 +47,7 @@ socket.on("registerNickname", async (nickname, status)=>{
 socket.on("globalMessages", (receiver, msg)=>{
     globalMessageCounter++;
     var container = document.getElementById("globalMessageContainer");
+    var divType = document.getElementById(receiver + "_typingID");
 
     if(container){
         var globalMessageCounterDiv = document.getElementById("globalMessageCounter");
@@ -78,6 +79,34 @@ socket.on("globalMessages", (receiver, msg)=>{
         messageWrapper.appendChild(messageContent);
 
         container.scrollTo(0, container.scrollHeight);
+    }
+
+    if(divType){
+        divType.remove();
+    }
+
+});
+
+socket.on("while_typing", (containerID, receiver, inputLength)=>{
+    var container = document.getElementById(containerID);
+    var divType = document.getElementById(receiver + "_typingID");
+
+    if(container && !divType){
+        var typingDiv = document.createElement("p");
+        typingDiv.setAttribute("class", "w-full h-fit p-2 font-roboto text-sm text-center text-black");
+        typingDiv.setAttribute("id", receiver + "_typingID");
+        typingDiv.appendChild(document.createTextNode(`${receiver} typing...`));
+        container.appendChild(typingDiv);
+        
+        container.scrollTo(0, container.scrollHeight);
+    }
+
+    if(divType){
+        divType.style.animation = "typingAnim 1s infinite alternate";
+    }
+
+    if(inputLength <= 0 && divType){
+        divType.remove();
     }
 });
 

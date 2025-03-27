@@ -49,52 +49,19 @@
             <h1 id="roomTitle" class="font-roboto text-center text-sm text-black">Room title</h1>
 
             <!--Content messages-->
-            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg"></div>
+            <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-lg p-2 flex flex-col overflow-x-hidden overflow-y-auto scroll-smooth gap-4" id="roomContainerMsg"></div>
 
             <!--Input messages-->
             <div class="w-full h-auto flex justify-between items-center gap-4">
                 <textarea id="roomMessageInput" type="text"
                     class="bg-white p-4 font-roboto text-sm text-left rounded-lg w-full h-[4rem] outline-none"
                     placeholder="Type Message..." maxlength="300"
-                    oninput="textCounter('roomMessageInput', 'roomInputMessageCounter', 300)"></textarea>
+                    oninput="textCounter('roomMessageInput', 'roomInputMessageCounter', 300); whileTyping('roomContainerMsg', 'roomMessageInput')"></textarea>
                 <div class="flex flex-col gap-2 items-center">
                     <button
                         class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700"
-                        onclick="">Send</button>
+                        onclick="sendMessageRoom()">Send</button>
                     <p id="roomInputMessageCounter" class="font-roboto text-left text-sm text-black">0/300</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Global Message Modal-->
-    <div id="globalMessageModal" class="absolute w-screen h-screen bg-black/50 justify-center items-center hidden">
-        <div class="w-[80%] h-auto bg-[#D5E5D5] rounded-lg md:w-[60%]">
-            <div class="w-full h-auto bg-[#cafaca] p-2 flex items-center justify-between">
-                <h1 class="w-full h-full text-center text-md text-black font-roboto font-bold">Global Message</h1>
-                <div class="p-2 w-[2rem] h-[2rem]flex justify-center items-center cursor-pointer"
-                    onclick="modalStatus('globalMessageModal','none')">
-                    <h1 class="text-red-500 font-bold text-center text-3xl">&times;</h1>
-                </div>
-            </div>
-
-            <div class="w-full h-auto p-2 flex flex-col gap-2">
-                <!--Content messages-->
-                <div class="w-full h-[20rem] bg-[#EEF1DA] rounded-md overflow-x-hidden overflow-y-auto scroll-smooth flex flex-col gap-4 p-2 max-xsm:h-[10rem]"
-                    id="globalMessageContainer"></div>
-
-                <!--Input messages-->
-                <div class="w-full h-auto flex justify-between items-center gap-4">
-                    <textarea id="globalMessageInput" type="text"
-                        class="bg-white p-4 font-roboto text-sm text-left rounded-lg w-full h-[4rem] outline-none"
-                        placeholder="Type Message..." maxlength="300"
-                        oninput="textCounter('globalMessageInput', 'globalInputMessageCounter', 300)"></textarea>
-                    <div class="flex flex-col gap-2 items-center">
-                        <button
-                            class="bg-green-500 font-roboto text-center text-white text-sm w-auto h-auto p-2 rounded-md cursor-pointer active:bg-green-700"
-                            onclick="sendMessage()">Send</button>
-                        <p id="globalInputMessageCounter" class="font-roboto text-left text-sm text-black">0/300</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -116,3 +83,4 @@
 <script src="/userFunction.js"></script>
 <script src="/socketStuffUser.js"></script>
 <script src="/roomFunction.js"></script>
+<script src="/socketRoomFunction.js"></script>

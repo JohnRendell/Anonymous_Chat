@@ -34,6 +34,15 @@ function div_popUp(text){
     }
 }
 
+//while typing
+function whileTyping(containerID, inputID){
+    var divType = document.getElementById(inputID);
+
+    if(divType){
+        socket.emit("while_typing", containerID, global_sender, divType.value.length);
+    }
+}
+
 //cookie stuff
 async function deleteCookie(cookieType) {
     try{
